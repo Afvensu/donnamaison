@@ -7,6 +7,7 @@ import {
   SIZES,
   priceFull,
   productById,
+  type Product,
 } from "@/data/products";
 import { GarmentArt, altPalette } from "@/components/GarmentArt";
 import { ColourSwatches, SizeButton } from "@/components/Drawers";

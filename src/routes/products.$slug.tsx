@@ -13,23 +13,26 @@ import { ColourSwatches, SizeButton } from "@/components/Drawers";
 import { Reveal } from "@/components/Reveal";
 import { useShop } from "@/store/shop";
 
+type ProductLoaderData = { product: Product };
+
 export const Route = createFileRoute("/products/$slug")({
-  head: ({ loaderData }) => ({
-    meta: [
-      {
-        title: loaderData ? `${loaderData.product.name} — Donna Maison` : "Donna Maison",
-      },
-      {
-        name: "description",
-        content:
-          loaderData?.product.note ??
-          "Hand-finished tailoring and dresses from Lagos, cut for real curves from size 6 to 20.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  loader: ({ params }) => {
+  head: ({ loaderData }) => {
+    const data = loaderData as ProductLoaderData | undefined;
+    return {
+      meta: [
+        { title: data ? `${data.product.name} — Donna Maison` : "Donna Maison" },
+        {
+          name: "description",
+          content:
+            data?.product.note ??
+            "Hand-finished tailoring and dresses from Lagos, cut for real curves from size 6 to 20.",
+        },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
+  loader: ({ params }): ProductLoaderData => {
     const product = productById(params.slug);
     if (!product) throw notFound();
     return { product };
@@ -38,7 +41,7 @@ export const Route = createFileRoute("/products/$slug")({
 });
 
 function ProductPage() {
-  const { product } = Route.useLoaderData();
+  const { product } = Route.useLoaderData() as ProductLoaderData;
   const { addToBag, openSizeGuide } = useShop();
   const [colour, setColour] = useState(product.colours[0]);
   const [size, setSize] = useState<string>("S");

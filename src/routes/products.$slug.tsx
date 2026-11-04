@@ -44,7 +44,7 @@ export const Route = createFileRoute("/products/$slug")({
 function ProductPage() {
   const { product } = Route.useLoaderData() as ProductLoaderData;
   const { addToBag, openSizeGuide } = useShop();
-  const [colour, setColour] = useState(product.colours[0]);
+  const [colour, setColour] = useState<string>(product.colours[0] ?? "");
   const [size, setSize] = useState<string>("S");
   const [fitOpen, setFitOpen] = useState(false);
 

@@ -1,24 +1,62 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import type { OccasionId } from "@/data/products";
+import { Hero, TrustBar } from "@/components/Hero";
+import { Occasions } from "@/components/Occasions";
+import { ProductGrid } from "@/components/ProductGrid";
+import { Story, FitSection, Journal } from "@/components/Story";
+import { AtelierLedger } from "@/components/AtelierLedger";
+import { Footer } from "@/components/Footer";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Donna Maison — Quietly powerful. Undeniably her." },
+      {
+        name: "description",
+        content:
+          "Step into the Collection. Tailoring that commands the room before you speak — hand-finished in Lagos, cut for real curves from size 6 to 20.",
+      },
+      { property: "og:title", content: "Donna Maison — Quietly powerful. Undeniably her." },
+      {
+        property: "og:description",
+        content:
+          "Tailoring that commands the room before you speak. Hand-finished in Lagos. Cut for real curves from size 6 to 20.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+type CatFilter = "all" | "Dresses" | "Sets";
+type CurFilter = "all" | "NGN" | "USD" | "EUR";
+
 function Index() {
+  const [cat, setCat] = useState<CatFilter>("all");
+  const [cur, setCur] = useState<CurFilter>("all");
+  const [occasion, setOccasion] = useState<OccasionId | null>(null);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <main>
+      <Hero />
+      <TrustBar />
+      <Occasions onSelect={setOccasion} active={occasion} />
+      <ProductGrid
+        cat={cat}
+        setCat={setCat}
+        cur={cur}
+        setCur={setCur}
+        occasion={occasion}
+        clearOccasion={() => setOccasion(null)}
       />
-    </div>
+      <Story />
+      <FitSection />
+      <Journal />
+      <div id="ledger" />
+      <AtelierLedger />
+      <Footer />
+    </main>
   );
 }

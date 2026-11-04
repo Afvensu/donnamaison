@@ -8,14 +8,14 @@ import { useMemo } from "react";
 
 export interface ArtOptions {
   uid: string;
-  name?: string;
+  name?: string | undefined;
   kind: "gown" | "midi" | "trouser";
-  hem?: number;
-  sleeves?: "none" | "short" | "long";
-  trousers?: boolean;
-  twotone?: boolean;
-  akwette?: boolean;
-  ruched?: boolean;
+  hem?: number | undefined;
+  sleeves?: "none" | "short" | "long" | undefined;
+  trousers?: boolean | undefined;
+  twotone?: boolean | undefined;
+  akwette?: boolean | undefined;
+  ruched?: boolean | undefined;
   palette: [string, string, string];
   studio: "dark" | "warm" | "bone";
 }

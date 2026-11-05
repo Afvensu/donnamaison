@@ -11,7 +11,7 @@ import { GarmentArt, altPalette } from "@/components/GarmentArt";
 import { Reveal } from "@/components/Reveal";
 import { useShop } from "@/store/shop";
 
-type CatFilter = "all" | "Dresses" | "Sets";
+type CatFilter = "all" | "Dresses" | "Trouser Sets" | "Skirt Sets";
 type CurFilter = "all" | "NGN" | "USD" | "EUR";
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
@@ -153,13 +153,13 @@ export function ProductGrid({
           <p className="max-w-[44ch] text-[13.5px] leading-relaxed text-ink-soft">
             {occasionTitle
               ? "Pieces cut for this exact room. Each one named, each one cut in a small run at the atelier."
-              : "Ten pieces, ready to wear. Each one named, each one cut in a small run at the atelier."}
+              : `${PRODUCTS.length} pieces, ready to wear. Each one named, each one cut in a small run at the atelier.`}
           </p>
         </Reveal>
 
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            {(["all", "Dresses", "Sets"] as const).map((c) => (
+            {(["all", "Dresses", "Trouser Sets", "Skirt Sets"] as const).map((c) => (
               <button
                 key={c}
                 onClick={() => setCat(c)}

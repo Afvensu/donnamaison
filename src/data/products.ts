@@ -1,3 +1,4 @@
+import { CATALOG } from "./catalog";
 /* =========================================================
    DONNA MAISON — CATALOGUE DATA
    Product names, prices, colourways and size brackets are the
@@ -12,7 +13,8 @@ export type OccasionId = "room" | "photograph" | "armour";
 export interface Product {
   id: string;
   name: string;
-  cat: "Dresses" | "Sets";
+  cat: "Dresses" | "Trouser Sets" | "Skirt Sets";
+  images: string[];
   cur: "NGN" | "USD" | "EUR";
   min: number;
   max: number;
@@ -118,7 +120,7 @@ export const ANNOUNCEMENTS = [
   "Sizes 6–20, cut to fit properly",
 ];
 
-export const PRODUCTS: Product[] = [
+const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "seona",
     name: "Seona",
@@ -364,6 +366,49 @@ export const PRODUCTS: Product[] = [
     studio: "dark",
   },
 ];
+
+const DEFAULTS: Record<Product["cat"], Omit<Product, "id" | "name" | "cat" | "cur" | "min" | "max" | "images">> = {
+  Dresses: {
+    colours: ["As pictured"],
+    note: "Hand-finished in Lagos",
+    fit: "Runs true to size. Cut for real curves — between sizes, size up for ease through the hip.",
+    desc: "A dress that does the work of a whole outfit. Clean through the shoulder, shaped through the waist, finished by hand at the atelier.",
+    fabric: "Premium woven fabric with breathable lining",
+    craft: ["Hand-finished seams at the Lagos atelier", "Cut in a small run", "Sizes 6–20"],
+    occasions: ["photograph", "armour"],
+    kind: "midi", hem: 76, sleeves: "short", palette: ["#cfbda2", "#8d7a60", "#ece3d1"], studio: "bone",
+  },
+  "Trouser Sets": {
+    colours: ["As pictured"],
+    note: "Two-piece, tailored",
+    fit: "Runs true to size. Trousers have a generous inseam — petite wearers may want the hem taken up.",
+    desc: "Tailoring that commands the room before you speak. A structured top and a clean-falling trouser, worn together or apart.",
+    fabric: "Structured crepe with soft stretch",
+    craft: ["Hand-finished seams at the Lagos atelier", "Wear as a set or separately", "Sizes 6–20"],
+    occasions: ["room", "armour"],
+    kind: "trouser", trousers: true, sleeves: "long", palette: ["#453c34", "#1a1613", "#6b5f52"], studio: "dark",
+  },
+  "Skirt Sets": {
+    colours: ["As pictured"],
+    note: "Two-piece, matched",
+    fit: "Runs true to size. The skirt sits at the natural waist — size by your waist measurement.",
+    desc: "A matched top and skirt, cut to move together. Polished enough for the occasion, easy enough to wear again and again.",
+    fabric: "Premium woven fabric with breathable lining",
+    craft: ["Hand-finished seams at the Lagos atelier", "Wear as a set or separately", "Sizes 6–20"],
+    occasions: ["photograph", "room"],
+    kind: "midi", hem: 72, sleeves: "long", palette: ["#5c2233", "#280e17", "#93506a"], studio: "warm",
+  },
+};
+
+const firstWord = (n: string) => n.toLowerCase().split(/\s+/)[0];
+
+export const PRODUCTS: Product[] = CATALOG.map((c) => {
+  const rich = RICH.find((r) => firstWord(r.name) === firstWord(c.name));
+  const base = rich && (rich.trousers ? c.cat === "Trouser Sets" : c.cat !== "Trouser Sets") ? rich : DEFAULTS[c.cat];
+  return { ...DEFAULTS[c.cat], ...base, id: c.id, name: c.name, cat: c.cat, cur: "NGN", min: c.min, max: c.max, images: c.images };
+});
+
+export const CATEGORIES = ["Dresses", "Trouser Sets", "Skirt Sets"] as const;
 
 export const productById = (id: string) => PRODUCTS.find((p) => p.id === id);
 

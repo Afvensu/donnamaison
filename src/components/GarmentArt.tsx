@@ -1,3 +1,4 @@
+import { PRODUCTS } from "@/data/products";
 import { useMemo } from "react";
 
 /* =========================================================
@@ -160,6 +161,18 @@ export function GarmentArt({
 }) {
   const uid = options.uid ?? options.name ?? "garment";
   const svg = useMemo(() => buildGarmentSvg({ ...options, uid }), [options, uid]);
+  const photos = PRODUCTS.find((p) => p.name === options.name)?.images ?? [];
+  if (photos.length) {
+    const src = /-alt$/.test(uid) && photos[1] ? photos[1] : photos[0];
+    return (
+      <img
+        src={src}
+        alt={options.name ?? "Donna Maison piece"}
+        loading="lazy"
+        className={`${className ?? ""} h-full w-full object-cover object-top`}
+      />
+    );
+  }
   return (
     <div
       className={className}

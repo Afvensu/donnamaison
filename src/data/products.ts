@@ -124,7 +124,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "seona",
     name: "Seona",
-    cat: "Dresses",
     cur: "USD",
     min: 290,
     max: 290,
@@ -148,7 +147,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "bella",
     name: "Bella",
-    cat: "Dresses",
     cur: "USD",
     min: 80,
     max: 85,
@@ -172,7 +170,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "yrukar",
     name: "Yrukar",
-    cat: "Dresses",
     cur: "USD",
     min: 87.5,
     max: 87.5,
@@ -197,7 +194,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "antoinette",
     name: "Antoinette",
-    cat: "Dresses",
     cur: "USD",
     min: 130,
     max: 135,
@@ -221,7 +217,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "adure",
     name: "Adure",
-    cat: "Dresses",
     cur: "USD",
     min: 112.5,
     max: 117.5,
@@ -246,7 +241,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "saphira",
     name: "Saphira",
-    cat: "Dresses",
     cur: "NGN",
     min: 140000,
     max: 150000,
@@ -271,7 +265,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "june",
     name: "June",
-    cat: "Dresses",
     cur: "NGN",
     min: 83200,
     max: 83200,
@@ -295,7 +288,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "maya",
     name: "Maya Trouser Set",
-    cat: "Sets",
     cur: "USD",
     min: 97.8,
     max: 97.8,
@@ -320,7 +312,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "arya",
     name: "Arya Trouser Set",
-    cat: "Sets",
     cur: "EUR",
     min: 110.17,
     max: 114.55,
@@ -344,7 +335,6 @@ const RICH: Omit<Product, "images" | "cat">[] = [
   {
     id: "allure",
     name: "Allure Set",
-    cat: "Sets",
     cur: "USD",
     min: 165,
     max: 170,

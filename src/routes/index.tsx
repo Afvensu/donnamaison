@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type CatFilter = "all" | "Dresses" | "Sets";
+type CatFilter = "all" | "Dresses" | "Trouser Sets" | "Skirt Sets";
 type CurFilter = "all" | "NGN" | "USD" | "EUR";
 
 function Index() {

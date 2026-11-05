@@ -22,7 +22,8 @@ export function Footer() {
               links: [
                 ["New in", "/#collection"],
                 ["Dresses", "/#collection"],
-                ["Sets", "/#collection"],
+                ["Trouser Sets", "/#collection"],
+                ["Skirt Sets", "/#collection"],
                 ["Occasions", "/#occasions"],
               ] as const,
             },

@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 Mount the shared storefront state provider in the document shell so every root and route consumer shares one context boundary.
+
+Render apparel imagery exclusively from supplied catalog photography, with a category-matched photo fallback for missing product photos, so no generated garment illustrations can appear.

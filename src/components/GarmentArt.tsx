@@ -14,14 +14,7 @@ export interface ArtOptions {
   studio: "dark" | "warm" | "bone";
 }
 
-/** Renders supplied catalog photography, using a category-matched photo when needed. */
-export function GarmentArt({
-  options,
-  className,
-}: {
-  options: Omit<ArtOptions, "uid"> & { uid?: string };
-  className?: string;
-}) {
+export function resolveGarmentPhoto(options: Pick<ArtOptions, "name" | "kind" | "trousers" | "uid">) {
   const uid = options.uid ?? options.name ?? "garment";
   const requestedProduct = PRODUCTS.find((product) => product.name === options.name);
   const fallbackCategory = options.trousers || options.kind === "trouser" ? "Trouser Sets" : "Dresses";
@@ -30,10 +23,19 @@ export function GarmentArt({
     PRODUCTS.find((product) => product.cat === fallbackCategory && product.images.length > 0) ??
     PRODUCTS.find((product) => product.images.length > 0);
 
-  if (!photoProduct?.images[0]) return null;
+  return photoProduct?.images[/\-alt$/.test(uid) && photoProduct.images[1] ? 1 : 0];
+}
 
-  const alternate = /-alt$/.test(uid) && photoProduct.images[1];
-  const src = alternate || photoProduct.images[0];
+/** Renders supplied catalog photography, using a category-matched photo when needed. */
+export function GarmentArt({
+  options,
+  className,
+}: {
+  options: Omit<ArtOptions, "uid"> & { uid?: string };
+  className?: string;
+}) {
+  const src = resolveGarmentPhoto(options);
+  if (!src) return null;
 
   return (
     <img

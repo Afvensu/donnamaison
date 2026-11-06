@@ -1,5 +1,5 @@
 import { GarmentArt } from "@/components/GarmentArt";
-import { CRAFT_HIGHLIGHTS } from "@/data/products";
+import { CRAFT_HIGHLIGHTS, PRODUCTS } from "@/data/products";
 import { Reveal } from "@/components/Reveal";
 import { useShop } from "@/store/shop";
 
@@ -14,7 +14,7 @@ export function Story() {
               className="absolute inset-0"
               options={{
                 uid: "story",
-                name: "atelier",
+                name: "Saphira Dress",
                 kind: "gown",
                 hem: 90,
                 sleeves: "none",
@@ -170,6 +170,7 @@ export function Journal() {
     {
       k: "Campaign",
       title: "The women who wear it before we photograph it",
+      photoProductId: "saphira-dress",
       palette: ["#6b4a2e", "#1f1710", "#a3794d"] as [string, string, string],
       art: { kind: "midi" as const, hem: 74, sleeves: "short" as const },
       studio: "warm" as const,
@@ -177,6 +178,7 @@ export function Journal() {
     {
       k: "Craft",
       title: "Why Akwete is placed by hand",
+      photoProductId: "bianca-dress",
       palette: ["#33333c", "#14141a", "#71717f"] as [string, string, string],
       art: { kind: "midi" as const, hem: 72, sleeves: "long" as const, akwette: true },
       studio: "dark" as const,
@@ -184,6 +186,7 @@ export function Journal() {
     {
       k: "Fit",
       title: "The four bodies we draft on",
+      photoProductId: "rene-trouser-set",
       palette: ["#c9b89e", "#8a7862", "#ece2d0"] as [string, string, string],
       art: { kind: "trouser" as const, sleeves: "long" as const, trousers: true },
       studio: "bone" as const,
@@ -210,6 +213,9 @@ export function Journal() {
         <div className="grid gap-4 md:grid-cols-3">
           {entries.map((e, i) => (
             <Reveal key={e.k} delay={i * 90}>
+              {(() => {
+                const photoProduct = PRODUCTS.find((product) => product.id === e.photoProductId);
+                return (
               <article
                 className={`group relative cursor-pointer overflow-hidden ${i === 0 ? "h-[440px]" : "h-[340px]"}`}
               >
@@ -217,7 +223,7 @@ export function Journal() {
                   className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.03]"
                   options={{
                     uid: `journal-${e.k}`,
-                    name: e.k,
+                    name: photoProduct?.name,
                     ...e.art,
                     palette: e.palette,
                     studio: e.studio,
@@ -234,6 +240,8 @@ export function Journal() {
                   </span>
                 </div>
               </article>
+                );
+              })()}
             </Reveal>
           ))}
         </div>

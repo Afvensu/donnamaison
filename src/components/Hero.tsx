@@ -51,7 +51,7 @@ export function Hero() {
           className="absolute inset-0"
           options={{
             uid: "hero",
-            name: "Saphira",
+            name: "Saphira Dress",
             kind: "midi",
             hem: 80,
             sleeves: "long",

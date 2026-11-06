@@ -1,5 +1,5 @@
 import { GarmentArt } from "@/components/GarmentArt";
-import { OCCASIONS, type OccasionId } from "@/data/products";
+import { OCCASIONS, PRODUCTS, type OccasionId } from "@/data/products";
 import { Reveal } from "@/components/Reveal";
 
 export function Occasions({
@@ -30,6 +30,11 @@ export function Occasions({
         <div className="grid gap-4 md:grid-cols-3">
           {OCCASIONS.map((o, i) => (
             <Reveal key={o.id} delay={i * 90}>
+              {(() => {
+                const photoProductId =
+                  o.id === "room" ? "rene-trouser-set" : o.id === "photograph" ? "saphira-dress" : "raquel-skirt-set";
+                const photoProduct = PRODUCTS.find((product) => product.id === photoProductId);
+                return (
               <button
                 onClick={() => {
                   onSelect(active === o.id ? null : o.id);
@@ -43,7 +48,7 @@ export function Occasions({
                   className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.03]"
                   options={{
                     uid: `occ-${o.id}`,
-                    name: o.title,
+                    name: photoProduct?.name,
                     kind: o.kind,
                     hem: o.hem,
                     sleeves: o.sleeves,
@@ -66,6 +71,8 @@ export function Occasions({
                   </span>
                 </div>
               </button>
+                );
+              })()}
             </Reveal>
           ))}
         </div>

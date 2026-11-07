@@ -98,23 +98,20 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [closeDrawer]);
 
-  const addToBag = useCallback(
-    (productId: string, colour: string, size: string) => {
-      const p = productById(productId);
-      if (!p) return;
-      const key = `${productId}|${colour}|${size}`;
-      setBag((prev) => {
-        const existing = prev.find((l) => l.key === key);
-        if (existing) {
-          return prev.map((l) => (l.key === key ? { ...l, qty: l.qty + 1 } : l));
-        }
-        return [...prev, { key, productId, colour, size, qty: 1 }];
-      });
-      setToast(`${p.name} — ${colour}, size ${size} added to your bag`);
-      setDrawer("bag");
-    },
-    [],
-  );
+  const addToBag = useCallback((productId: string, colour: string, size: string) => {
+    const p = productById(productId);
+    if (!p) return;
+    const key = `${productId}|${colour}|${size}`;
+    setBag((prev) => {
+      const existing = prev.find((l) => l.key === key);
+      if (existing) {
+        return prev.map((l) => (l.key === key ? { ...l, qty: l.qty + 1 } : l));
+      }
+      return [...prev, { key, productId, colour, size, qty: 1 }];
+    });
+    setToast(`${p.name} — ${colour}, size ${size} added to your bag`);
+    setDrawer("bag");
+  }, []);
 
   const setLineSize = useCallback((key: string, size: string) => {
     setBag((prev) =>
@@ -126,7 +123,9 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
   const setLineQty = useCallback((key: string, qty: number) => {
     setBag((prev) =>
-      qty <= 0 ? prev.filter((l) => l.key !== key) : prev.map((l) => (l.key === key ? { ...l, qty } : l)),
+      qty <= 0
+        ? prev.filter((l) => l.key !== key)
+        : prev.map((l) => (l.key === key ? { ...l, qty } : l)),
     );
   }, []);
 
@@ -209,7 +208,7 @@ export function bagSummary(bag: BagLine[]) {
   return Array.from(groups.entries()).map(([cur, g]) => ({
     cur,
     symbol: CURRENCIES[cur].symbol,
-    region: CURRENCIES[cur].region,
+
     totalLabel: `${CURRENCIES[cur].symbol}${g.total.toLocaleString("en-GB", { minimumFractionDigits: g.total % 1 ? 2 : 0, maximumFractionDigits: 2 })}`,
     qty: g.qty,
   }));

@@ -11,4 +11,10 @@
 
 Mount the shared storefront state provider in the document shell so every root and route consumer shares one context boundary.
 
-Render apparel imagery exclusively from supplied catalog photography, with a category-matched photo fallback for missing product photos, so no generated garment illustrations can appear.
+Render only each product's exact supplied catalogue photographs in their original order; missing or failed images use neutral placeholders to avoid misidentifying garments.
+
+Derive storefront products directly from the supplied catalogue without merging generated legacy product details, so names, slugs, prices and images remain authoritative.
+
+Use shared modal focus/scroll-lock behaviour for drawers and the mobile menu, so inactive overlays are inert and open overlays are keyboard accessible.
+
+Expose progressive catalogue batches alongside server-rendered search-parameter pagination links, so discovery remains accessible to crawlers and non-observer browsers.

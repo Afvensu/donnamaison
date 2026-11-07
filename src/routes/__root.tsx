@@ -85,14 +85,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Hand-finished tailoring and dresses from Lagos, cut for real curves from size 6 to 20. Cut in runs of twenty, built to outlast five seasons of fast fashion.",
+          "Donna Maison ready-to-wear: dresses, trouser sets and skirt sets for the modern, cosmopolitan woman.",
       },
       { name: "author", content: "Donna Maison" },
       { property: "og:title", content: "Donna Maison — Quietly powerful. Undeniably her." },
       {
         property: "og:description",
         content:
-          "Tailoring that commands the room before you speak. Hand-finished in Lagos. Cut for real curves from size 6 to 20.",
+          "Ready-to-wear for every version of her. Explore dresses, trouser sets and skirt sets from Donna Maison.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -148,7 +148,7 @@ function ShopChrome() {
       <SizeGuideDrawer />
       <div
         aria-live="polite"
-        className={`fixed bottom-6 left-1/2 z-100 -translate-x-1/2 bg-ink px-6 py-3.5 text-[11px] tracking-[0.14em] text-bone uppercase shadow-xl transition-all duration-300 ${
+        className={`fixed bottom-6 left-1/2 z-100 w-max max-w-[calc(100%-2rem)] text-center -translate-x-1/2 bg-ink px-6 py-3.5 text-[11px] tracking-[0.14em] text-bone uppercase shadow-xl transition-all duration-300 ${
           toast ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
         }`}
       >

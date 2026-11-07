@@ -60,16 +60,16 @@
 :root {
   --radius: 0rem;
   /* Brand palette (converted from the prototype hex values) */
-  --bone: oklch(0.977 0.008 80);        /* #faf7f2 */
-  --paper: oklch(1 0 0);                /* #ffffff */
-  --sand-warm: oklch(0.94 0.014 80);    /* #f0e9df */
-  --line: oklch(0.888 0.021 82);        /* #e2d9cc */
-  --ink: oklch(0.215 0.008 67);         /* #1c1917 */
-  --ink-soft: oklch(0.36 0.014 63);     /* #4a443f */
-  --muted-warm: oklch(0.585 0.02 78);   /* #8a8279 */
-  --terracotta: oklch(0.44 0.112 38);   /* #8c3f2b */
-  --gold: oklch(0.645 0.082 82);        /* #a8894f */
-  --gold-dark: oklch(0.8 0.08 85);      /* #d9b98a */
+  --bone: oklch(0.977 0.008 80); /* #faf7f2 */
+  --paper: oklch(1 0 0); /* #ffffff */
+  --sand-warm: oklch(0.94 0.014 80); /* #f0e9df */
+  --line: oklch(0.888 0.021 82); /* #e2d9cc */
+  --ink: oklch(0.215 0.008 67); /* #1c1917 */
+  --ink-soft: oklch(0.36 0.014 63); /* #4a443f */
+  --muted-warm: oklch(0.585 0.02 78); /* #8a8279 */
+  --terracotta: oklch(0.44 0.112 38); /* #8c3f2b */
+  --gold: oklch(0.645 0.082 82); /* #a8894f */
+  --gold-dark: oklch(0.8 0.08 85); /* #d9b98a */
 
   /* shadcn semantic mapping */
   --background: var(--bone);
@@ -156,6 +156,27 @@
     transform 0.7s var(--ease-luxe);
 
   &.reveal-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Protective guard after responsive tracks and overlay widths are corrected. */
+html,
+body {
+  overflow-x: clip;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  .reveal {
     opacity: 1;
     transform: none;
   }

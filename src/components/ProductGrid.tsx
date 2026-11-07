@@ -1,224 +1,206 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { Heart } from "lucide-react";
+import { OCCASIONS, priceShort, type OccasionId, type Product } from "@/data/products";
 import {
-  CURRENCIES,
-  OCCASIONS,
-  PRODUCTS,
-  priceShort,
-  type OccasionId,
-  type Product,
-} from "@/data/products";
-import { GarmentArt, altPalette } from "@/components/GarmentArt";
+  BATCH_SIZE,
+  filterProducts,
+  nextVisibleCount,
+  type CategoryFilter,
+} from "@/data/discovery";
+import { GarmentArt } from "@/components/GarmentArt";
+import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/Reveal";
 import { useShop } from "@/store/shop";
-
-type CatFilter = "all" | "Dresses" | "Trouser Sets" | "Skirt Sets";
-type CurFilter = "all" | "NGN" | "USD" | "EUR";
-
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const { openQuickView, saved, toggleSaved } = useShop();
   const isSaved = saved.includes(product.id);
-  const occasionLabels = product.occasions
-    .map((o) => OCCASIONS.find((x) => x.id === o)?.title)
-    .filter(Boolean)
-    .join(" · ");
-
+  const art = {
+    name: product.name,
+    kind: product.kind,
+    palette: product.palette,
+    studio: product.studio,
+  };
   return (
-    <Reveal as="article" delay={index * 55} className="group flex flex-col">
-      <div
-        className="relative aspect-[3/4] cursor-pointer overflow-hidden bg-sand-warm"
-        onClick={() => openQuickView(product.id)}
-      >
-        <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0">
+    <Reveal as="article" delay={(index % BATCH_SIZE) * 35} className="group min-w-0">
+      <div className="relative aspect-[3/4] overflow-hidden bg-sand-warm">
+        <Button
+          variant="ghost"
+          onClick={() => openQuickView(product.id)}
+          aria-label={`Quick view ${product.name}`}
+          className="absolute inset-0 h-full w-full rounded-none p-0"
+        >
           <GarmentArt
             className="absolute inset-0"
-            options={{
-              uid: `card-${product.id}-main`,
-              name: product.name,
-              kind: product.kind,
-              hem: product.hem,
-              sleeves: product.sleeves,
-              trousers: product.trousers,
-              twotone: product.twotone,
-              akwette: product.akwette,
-              ruched: product.ruched,
-              palette: product.palette,
-              studio: product.studio,
-            }}
+            options={{ ...art, uid: `card-${product.id}-main` }}
           />
-        </div>
-        <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          <GarmentArt
-            className="absolute inset-0"
-            options={{
-              uid: `card-${product.id}-alt`,
-              name: product.name,
-              kind: product.kind,
-              hem: product.hem,
-              sleeves: product.sleeves,
-              trousers: product.trousers,
-              twotone: product.twotone,
-              akwette: product.akwette,
-              ruched: product.ruched,
-              palette: altPalette(product.palette),
-              studio: product.studio,
-            }}
-          />
-        </div>
-        {product.min !== product.max && (
-          <div className="absolute top-3 left-3 bg-ink/86 px-2.5 py-1 text-[9px] tracking-[0.16em] text-bone uppercase">
-            Price range
-          </div>
-        )}
-        <button
-          aria-label="Save"
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleSaved(product.id);
-          }}
-          className={`absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full text-[14px] transition-all duration-300 ${
-            isSaved ? "bg-terracotta text-white opacity-100" : "bg-paper/85 text-ink-soft opacity-0 group-hover:opacity-100"
-          }`}
+          {product.images[1] && (
+            <GarmentArt
+              className="absolute inset-0 hidden opacity-0 transition-opacity duration-500 sm:block sm:group-hover:opacity-100"
+              options={{ ...art, uid: `card-${product.id}-alt` }}
+            />
+          )}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={`${isSaved ? "Unsave" : "Save"} ${product.name}`}
+          aria-pressed={isSaved}
+          onClick={() => toggleSaved(product.id)}
+          className={`absolute right-2 top-2 h-11 w-11 bg-paper/85 ${isSaved ? "text-terracotta" : "text-ink-soft"}`}
         >
-          {isSaved ? "♥" : "♡"}
-        </button>
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            openQuickView(product.id);
-          }}
-          className="absolute right-0 bottom-0 left-0 translate-y-full bg-ink py-3 text-center text-[10.5px] font-medium tracking-[0.2em] text-bone uppercase transition-transform duration-300 group-hover:translate-y-0"
+          <Heart fill={isSaved ? "currentColor" : "none"} />
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => openQuickView(product.id)}
+          className="absolute inset-x-0 bottom-0 hidden h-11 rounded-none bg-ink text-bone opacity-0 transition-opacity sm:flex sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
         >
-          Quick add
-        </div>
+          Quick view
+        </Button>
       </div>
-      <div className="flex items-start justify-between gap-3 pt-3.5">
-        <div>
-          <Link
-            to="/products/$slug"
-            params={{ slug: product.id }}
-            className="font-serif text-[17.5px] leading-snug underline-offset-4 hover:text-terracotta hover:underline"
-          >
-            {product.name}
-          </Link>
-          <div className="text-[11px] text-muted-warm">{product.note}</div>
-          <div className="mt-1 text-[9.5px] tracking-[0.14em] text-muted-warm/80 uppercase">
-            {occasionLabels}
-          </div>
-        </div>
-        <div className="text-right whitespace-nowrap">
-          <div className="font-serif text-[15px]">{priceShort(product)}</div>
-          <div className="text-[9.5px] tracking-[0.1em] text-muted-warm uppercase">
-            {CURRENCIES[product.cur].region}
-          </div>
+      <div className="grid min-w-0 gap-1 pt-3.5">
+        <Link
+          to="/products/$slug"
+          params={{ slug: product.id }}
+          className="min-w-0 break-words font-serif text-[16px] leading-snug hover:text-terracotta sm:text-[18px]"
+        >
+          {product.name}
+        </Link>
+        <div className="text-[10px] text-muted-warm uppercase">{product.cat}</div>
+        <div className="break-words font-serif text-[15px] leading-snug text-ink">
+          {priceShort(product)}
         </div>
       </div>
     </Reveal>
   );
 }
-
 export function ProductGrid({
   cat,
   setCat,
-  cur,
-  setCur,
   occasion,
   clearOccasion,
+  page = 1,
 }: {
-  cat: CatFilter;
-  setCat: (c: CatFilter) => void;
-  cur: CurFilter;
-  setCur: (c: CurFilter) => void;
+  cat: CategoryFilter;
+  setCat: (c: CategoryFilter) => void;
   occasion: OccasionId | null;
   clearOccasion: () => void;
+  page?: number;
 }) {
-  const list = PRODUCTS.filter(
-    (p) =>
-      (cat === "all" || p.cat === cat) &&
-      (cur === "all" || p.cur === cur) &&
-      (!occasion || p.occasions.includes(occasion)),
-  );
-
-  const occasionTitle = occasion ? OCCASIONS.find((o) => o.id === occasion)?.title : null;
-
+  const list = filterProducts(cat, occasion);
+  const key = `${cat}:${occasion}:${page}`;
+  const [batch, setBatch] = useState({ key, count: BATCH_SIZE });
+  if (batch.key !== key) setBatch({ key, count: BATCH_SIZE });
+  const count = batch.key === key ? batch.count : BATCH_SIZE;
+  const start = (page - 1) * BATCH_SIZE;
+  const remaining = list.slice(start);
+  const shown = remaining.slice(0, count);
+  const more = shown.length < remaining.length;
+  const sentinel = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!more || !sentinel.current || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting))
+          setBatch((previous) => ({
+            key,
+            count: nextVisibleCount(
+              previous.key === key ? previous.count : BATCH_SIZE,
+              remaining.length,
+            ),
+          }));
+      },
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(sentinel.current);
+    return () => observer.disconnect();
+  }, [key, count, more, remaining.length]);
+  const title = OCCASIONS.find((o) => o.id === occasion)?.title;
+  const pages = Math.ceil(list.length / BATCH_SIZE);
   return (
     <section id="collection" className="scroll-mt-24 px-5 pt-4 pb-20 sm:px-8 lg:px-16">
       <div className="mx-auto max-w-[1400px]">
-        <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-6">
-          <div>
+        <Reveal className="mb-8 grid gap-6 sm:grid-cols-2">
+          <div className="min-w-0">
             <span className="eyebrow">The Season Edit</span>
-            <h2 className="mt-3 font-serif text-[clamp(30px,3.8vw,50px)] leading-[1.02] font-light tracking-[-0.02em]">
-              {occasionTitle ?? "New in"}
+            <h2 className="mt-3 font-serif text-[40px] leading-tight font-light">
+              {title ?? "The collection"}
             </h2>
           </div>
           <p className="max-w-[44ch] text-[13.5px] leading-relaxed text-ink-soft">
-            {occasionTitle
-              ? "Pieces cut for this exact room. Each one named, each one cut in a small run at the atelier."
-              : `${PRODUCTS.length} pieces, ready to wear. Each one named, each one cut in a small run at the atelier.`}
+            Donna Maison ready-to-wear. Dresses, trouser sets and skirt sets for every version of
+            her.
           </p>
         </Reveal>
-
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {(["all", "Dresses", "Trouser Sets", "Skirt Sets"] as const).map((c) => (
-              <button
-                key={c}
-                onClick={() => setCat(c)}
-                className={`border px-4 py-2 text-[10.5px] tracking-[0.16em] uppercase transition-all duration-300 ${
-                  cat === c
-                    ? "border-ink bg-ink text-bone"
-                    : "border-line text-ink-soft hover:border-ink"
-                }`}
-              >
-                {c === "all" ? "All" : c}
-              </button>
-            ))}
-            {occasionTitle && (
-              <button
-                onClick={clearOccasion}
-                className="flex items-center gap-2 border border-terracotta bg-terracotta/10 px-4 py-2 text-[10.5px] tracking-[0.16em] text-terracotta uppercase transition-colors hover:bg-terracotta hover:text-white"
-              >
-                {occasionTitle} <span aria-hidden>✕</span>
-              </button>
-            )}
-          </div>
-          <select
-            value={cur}
-            onChange={(e) => setCur(e.target.value as CurFilter)}
-            aria-label="Region and currency"
-            className="cursor-pointer appearance-none rounded-full border border-line bg-transparent py-2.5 pr-9 pl-4 text-[10.5px] tracking-[0.14em] text-ink-soft uppercase transition-colors hover:border-ink"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a8279' fill='none' stroke-width='1.2'/%3E%3C/svg%3E\")",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 13px center",
-            }}
-          >
-            <option value="all">All regions</option>
-            <option value="NGN">Nigeria — ₦</option>
-            <option value="USD">International — $</option>
-            <option value="EUR">Europe — €</option>
-          </select>
+        <div className="mb-8 flex flex-wrap gap-2">
+          {(["all", "Dresses", "Trouser Sets", "Skirt Sets"] as const).map((c) => (
+            <Button
+              key={c}
+              variant="outline"
+              aria-pressed={cat === c}
+              onClick={() => setCat(c)}
+              className={`h-auto min-h-11 whitespace-normal rounded-none px-3 text-[10px] uppercase ${cat === c ? "border-ink bg-ink text-bone" : "border-line text-ink-soft"}`}
+            >
+              {c === "all" ? "All" : c}
+            </Button>
+          ))}
+          {title && (
+            <Button
+              variant="outline"
+              onClick={clearOccasion}
+              className="h-auto min-h-11 whitespace-normal rounded-none text-[10px] text-terracotta"
+            >
+              {title} ×
+            </Button>
+          )}
         </div>
-
-        {list.length === 0 ? (
-          <p className="py-16 text-center text-[13px] text-muted-warm">
-            Nothing listed here yet. Choose another region — or ask the atelier about a private
-            order.
-          </p>
-        ) : (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">
-            {list.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} />
-            ))}
-          </div>
+        <div
+          data-testid="product-grid"
+          className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6"
+        >
+          {shown.map((p, i) => (
+            <ProductCard key={p.id} product={p} index={i} />
+          ))}
+        </div>
+        {!shown.length && (
+          <p className="py-12 text-center text-muted-warm">No pieces in this edit.</p>
         )}
-
-        <p className="mx-auto mt-12 max-w-[72ch] text-[11px] leading-[1.7] text-muted-warm">
-          <b className="font-semibold text-ink-soft">Every piece includes:</b> a transparent fit
-          note written by the cutter · full fabric composition · UK sizes 6–20 · complimentary
-          atelier fitting and alterations within 14 days. Built to outlast five seasons of fast
-          fashion.
-        </p>
+        <div
+          ref={sentinel}
+          className="mt-8 flex min-h-24 flex-col items-center justify-center gap-4"
+        >
+          <p aria-live="polite" className="text-center text-[11px] text-muted-warm">
+            {more
+              ? `Showing ${Math.min(start + shown.length, list.length)} of ${list.length} pieces`
+              : `You have viewed ${start ? "this page" : "the full edit"} · ${shown.length} pieces`}
+          </p>
+          {more && (
+            <Button
+              variant="outline"
+              onClick={() => setBatch({ key, count: nextVisibleCount(count, remaining.length) })}
+              className="min-h-11 rounded-none uppercase text-[11px]"
+            >
+              Load more
+            </Button>
+          )}
+        </div>
+        {pages > 1 && (
+          <nav aria-label="Collection pages" className="mt-4 flex flex-wrap justify-center gap-2">
+            {Array.from({ length: pages }, (_, i) => (
+              <Link
+                key={i}
+                to="/"
+                search={{ page: i + 1, category: cat, occasion: occasion ?? undefined }}
+                hash="collection"
+                aria-current={page === i + 1 ? "page" : undefined}
+                className="grid h-11 w-11 place-items-center border border-line text-[11px] hover:border-ink"
+              >
+                {i + 1}
+              </Link>
+            ))}
+          </nav>
+        )}
       </div>
     </section>
   );

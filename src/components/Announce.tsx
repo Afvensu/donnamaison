@@ -10,7 +10,7 @@ export function Announce() {
   }, []);
 
   return (
-    <div className="relative flex h-[38px] items-center justify-center overflow-hidden bg-ink text-[11px] tracking-[0.16em] text-[#f5efe6] uppercase">
+    <div className="relative flex h-[38px] items-center justify-center overflow-hidden bg-ink text-[11px] tracking-[0.16em] text-bone uppercase">
       {ANNOUNCEMENTS.map((msg, i) => (
         <span
           key={msg}

@@ -14,7 +14,9 @@ export interface ArtOptions {
   studio: "dark" | "warm" | "bone";
 }
 
-export function resolveGarmentPhoto(options: Pick<ArtOptions, "name" | "kind" | "trousers" | "uid">) {
+export function resolveGarmentPhoto(
+  options: Pick<ArtOptions, "name" | "kind" | "trousers"> & { uid?: string },
+) {
   const uid = options.uid ?? options.name ?? "garment";
   const requestedProduct = PRODUCTS.find((product) => product.name === options.name);
   const fallbackCategory = options.trousers || options.kind === "trouser" ? "Trouser Sets" : "Dresses";
@@ -36,6 +38,7 @@ export function GarmentArt({
 }) {
   const src = resolveGarmentPhoto(options);
   if (!src) return null;
+  const uid = options.uid ?? options.name ?? "garment";
 
   return (
     <img

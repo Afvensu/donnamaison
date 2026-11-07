@@ -19,7 +19,9 @@ export function resolveGarmentPhoto(
 ) {
   const uid = options.uid ?? options.name ?? "garment";
   const requestedProduct = PRODUCTS.find((product) => product.name === options.name);
-  const fallbackCategory = options.trousers || options.kind === "trouser" ? "Trouser Sets" : "Dresses";
+  const fallbackCategory =
+    requestedProduct?.cat ??
+    (options.trousers || options.kind === "trouser" ? "Trouser Sets" : "Dresses");
   const photoProduct =
     (requestedProduct?.images.length ? requestedProduct : undefined) ??
     PRODUCTS.find((product) => product.cat === fallbackCategory && product.images.length > 0) ??

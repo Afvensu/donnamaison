@@ -40,13 +40,12 @@ export function GarmentArt({
 }) {
   const src = resolveGarmentPhoto(options);
   if (!src) return null;
-  const uid = options.uid ?? options.name ?? "garment";
 
   return (
     <img
       src={src}
       alt={options.name ? `${options.name} by Donna Maison` : "Donna Maison design"}
-      loading={uid === "hero" ? "eager" : "lazy"}
+      loading={options.uid === "hero" ? "eager" : "lazy"}
       decoding="async"
       className={`${className ?? ""} h-full w-full object-cover object-top`}
     />

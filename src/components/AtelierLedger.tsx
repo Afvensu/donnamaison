@@ -15,7 +15,10 @@ export function AtelierLedger() {
 
           <ul className="mx-auto mb-9 flex max-w-[560px] flex-col gap-2.5 text-left">
             {BENEFITS.map((b, i) => (
-              <li key={b} className="flex items-start gap-3 text-[12.5px] leading-relaxed text-ink-soft">
+              <li
+                key={b}
+                className="flex items-start gap-3 text-[12.5px] leading-relaxed text-ink-soft"
+              >
                 <span className="mt-0.5 font-serif text-[13px] text-terracotta">
                   {String(i + 1).padStart(2, "0")}
                 </span>

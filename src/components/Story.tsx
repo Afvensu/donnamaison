@@ -9,7 +9,10 @@ import { useShop } from "@/store/shop";
 export function Story() {
   return (
     <>
-      <section id="atelier" className="scroll-mt-24 border-y border-line bg-paper px-5 py-16 sm:px-8 lg:px-16 lg:py-24">
+      <section
+        id="atelier"
+        className="scroll-mt-24 border-y border-line bg-paper px-5 py-16 sm:px-8 lg:px-16 lg:py-24"
+      >
         <div className="mx-auto grid max-w-[1400px] items-center gap-10 md:grid-cols-2">
           <div className="relative aspect-[3/4] overflow-hidden bg-sand-warm">
             <GarmentArt
@@ -33,10 +36,13 @@ export function Story() {
               <em className="italic">of her.</em>
             </h2>
             <p className="mb-4 text-[14px] leading-relaxed text-ink-soft">
-              Donna Maison is a ready-to-wear fashion brand for the modern, cosmopolitan woman. Dresses, trouser sets and skirt sets for the different contexts of her life.
+              Donna Maison is a ready-to-wear fashion brand for the modern, cosmopolitan woman.
+              Dresses, trouser sets and skirt sets for the different contexts of her life.
             </p>
             <p className="mb-8 text-[14px] leading-relaxed text-ink-soft">
-              From professional occasions to celebrations and everyday plans, personal style is the thread that connects them. Refined style, effortless wear and confidence — on your terms.
+              From professional occasions to celebrations and everyday plans, personal style is the
+              thread that connects them. Refined style, effortless wear and confidence — on your
+              terms.
             </p>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
               {[
@@ -85,21 +91,26 @@ export function FitSection() {
     <section className="bg-ink text-bone">
       <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-16 sm:px-8 lg:grid-cols-2 lg:px-16 lg:py-24">
         <Reveal>
-          <span className="eyebrow" >
-            Size &amp; fit
-          </span>
+          <span className="eyebrow">Size &amp; fit</span>
           <h2 className="mt-4 mb-5 font-serif text-[clamp(28px,3.4vw,46px)] leading-[1.05] font-light tracking-[-0.02em]">
             Find your size,
             <br />
             <em className="italic text-gold-dark">wear it your way.</em>
           </h2>
           <p className="mb-7 text-[13.5px] leading-relaxed text-bone/80">
-            Choose ready-to-wear sizing with care. Check available size information and contact Donna Maison before ordering if you are unsure. Detailed garment measurements are not available here.
+            Choose ready-to-wear sizing with care. Check available size information and contact
+            Donna Maison before ordering if you are unsure. Detailed garment measurements are not
+            available here.
           </p>
           <div className="mb-8 grid grid-cols-4 gap-2">
-            {SIZES.map(s => <div key={s.id} className="border border-bone/20 px-3 py-3 text-center font-serif">{s.id}</div>)}
+            {SIZES.map((s) => (
+              <div key={s.id} className="border border-bone/20 px-3 py-3 text-center font-serif">
+                {s.id}
+              </div>
+            ))}
           </div>
-          <Button variant="ghost"
+          <Button
+            variant="ghost"
             onClick={openSizeGuide}
             className="h-auto whitespace-normal rounded-none bg-bone px-8 py-4 text-[11px] font-medium tracking-[0.2em] text-ink uppercase transition-colors duration-300 hover:bg-terracotta hover:text-paper"
           >
@@ -109,9 +120,18 @@ export function FitSection() {
         <Reveal delay={120}>
           <ul className="space-y-5">
             {[
-              ["Check the available sizes.", "Confirm the size options for the piece you are considering."],
-              ["Measurements matter.", "Ask Donna Maison for garment measurements before ordering when they are not listed."],
-              ["Ready-to-wear, not custom-made.", "Choose the available style and size that suit your preferences."],
+              [
+                "Check the available sizes.",
+                "Confirm the size options for the piece you are considering.",
+              ],
+              [
+                "Measurements matter.",
+                "Ask Donna Maison for garment measurements before ordering when they are not listed.",
+              ],
+              [
+                "Ready-to-wear, not custom-made.",
+                "Choose the available style and size that suit your preferences.",
+              ],
             ].map(([b, d], i) => (
               <li key={b} className="flex gap-4 border-b border-bone/10 pb-5 last:border-b-0">
                 <span className="w-6 shrink-0 font-serif text-[15px] text-gold-dark">
@@ -180,28 +200,29 @@ export function Journal() {
               {(() => {
                 const photoProduct = PRODUCTS.find((product) => product.id === e.photoProductId);
                 return (
-              <article
-                className={`group relative overflow-hidden ${i === 0 ? "h-[440px]" : "h-[340px]"}`}
-              >
-                <GarmentArt
-                  className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.03]"
-                  options={{
-                    uid: `journal-${e.k}`,
-                    name: photoProduct?.name,
-                    ...e.art,
-                    palette: e.palette,
-                    studio: e.studio,
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent" />
-                <div className="relative z-2 flex h-full flex-col justify-end p-6 text-paper">
-                  <div className="text-[9.5px] tracking-[0.22em] uppercase opacity-80">{e.k}</div>
-                  <h3 className="mt-2 font-serif text-[clamp(19px,2vw,27px)] leading-tight font-normal">
-                    {e.title}
-                  </h3>
-
-                </div>
-              </article>
+                  <article
+                    className={`group relative overflow-hidden ${i === 0 ? "h-[440px]" : "h-[340px]"}`}
+                  >
+                    <GarmentArt
+                      className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.03]"
+                      options={{
+                        uid: `journal-${e.k}`,
+                        name: photoProduct?.name,
+                        ...e.art,
+                        palette: e.palette,
+                        studio: e.studio,
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent" />
+                    <div className="relative z-2 flex h-full flex-col justify-end p-6 text-paper">
+                      <div className="text-[9.5px] tracking-[0.22em] uppercase opacity-80">
+                        {e.k}
+                      </div>
+                      <h3 className="mt-2 font-serif text-[clamp(19px,2vw,27px)] leading-tight font-normal">
+                        {e.title}
+                      </h3>
+                    </div>
+                  </article>
                 );
               })()}
             </Reveal>

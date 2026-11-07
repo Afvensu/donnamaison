@@ -12,7 +12,8 @@ export function Footer() {
               Donna Maison
             </span>
             <p className="max-w-[34ch] text-[12.5px] leading-relaxed text-bone/60">
-              Ready-to-wear for the modern, cosmopolitan woman. Dresses, trouser sets and skirt sets for every version of her.
+              Ready-to-wear for the modern, cosmopolitan woman. Dresses, trouser sets and skirt sets
+              for every version of her.
             </p>
           </div>
           {[
@@ -36,7 +37,9 @@ export function Footer() {
             },
           ].map((col) => (
             <div key={col.h}>
-              <h4 className="mb-4 text-[10px] font-semibold tracking-[0.22em] uppercase">{col.h}</h4>
+              <h4 className="mb-4 text-[10px] font-semibold tracking-[0.22em] uppercase">
+                {col.h}
+              </h4>
               <ul className="space-y-2.5">
                 {col.links.map(([label, href]) => (
                   <li key={label}>
@@ -62,9 +65,10 @@ export function Footer() {
                   Size &amp; fit
                 </button>
               </li>
-              
-              
-              <li className="text-[12.5px] text-bone/60">Confirm sizing and purchase policies with Donna Maison before ordering.</li>
+
+              <li className="text-[12.5px] text-bone/60">
+                Confirm sizing and purchase policies with Donna Maison before ordering.
+              </li>
             </ul>
           </div>
         </div>

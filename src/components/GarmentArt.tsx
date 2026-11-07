@@ -18,7 +18,7 @@ export interface ArtOptions {
 export function resolveGarmentPhoto(
   options: Pick<ArtOptions, "name" | "kind" | "trousers"> & { uid?: string },
 ) {
-  const product = PRODUCTS.find(product => product.name === options.name);
+  const product = PRODUCTS.find((product) => product.name === options.name);
   if (!product) return undefined;
   const index = /-alt$/.test(options.uid ?? "") && product.images[1] ? 1 : 0;
   return product.images[index];
@@ -34,12 +34,19 @@ export function GarmentArt({
 }) {
   const src = resolveGarmentPhoto(options);
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
-  if (!src || failedSrc === src) return (
-    <div role="img" aria-label={`${options.name ?? "Donna Maison"} — photograph unavailable`} className={`${className ?? ""} flex h-full w-full flex-col items-center justify-center gap-3 bg-sand-warm p-3 text-center text-muted-warm`}>
-      <span aria-hidden="true" className="font-serif text-3xl">DM</span>
-      <span className="text-[11px] leading-relaxed">Photograph unavailable</span>
-    </div>
-  );
+  if (!src || failedSrc === src)
+    return (
+      <div
+        role="img"
+        aria-label={`${options.name ?? "Donna Maison"} — photograph unavailable`}
+        className={`${className ?? ""} flex h-full w-full flex-col items-center justify-center gap-3 bg-sand-warm p-3 text-center text-muted-warm`}
+      >
+        <span aria-hidden="true" className="font-serif text-3xl">
+          DM
+        </span>
+        <span className="text-[11px] leading-relaxed">Photograph unavailable</span>
+      </div>
+    );
 
   return (
     <img

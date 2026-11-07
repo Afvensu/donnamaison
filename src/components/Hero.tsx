@@ -20,7 +20,8 @@ export function Hero() {
           <em className="italic">Undeniably her.</em>
         </h1>
         <p className="mb-8 max-w-[46ch] text-[14.5px] leading-relaxed text-ink-soft">
-          Versatile ready-to-wear for the many sides of the modern woman. Refined silhouettes, effortless elegance and pieces that move with every occasion.
+          Versatile ready-to-wear for the many sides of the modern woman. Refined silhouettes,
+          effortless elegance and pieces that move with every occasion.
         </p>
         <div className="flex flex-wrap gap-3">
           <a
@@ -29,7 +30,8 @@ export function Hero() {
           >
             Explore the Collection <span aria-hidden>→</span>
           </a>
-          <Button variant="ghost"
+          <Button
+            variant="ghost"
             onClick={openSizeGuide}
             className="h-auto whitespace-normal rounded-none inline-flex items-center gap-3 border border-ink px-8 py-4 text-[11px] font-medium tracking-[0.2em] text-ink uppercase transition-all duration-300 hover:bg-ink hover:text-bone"
           >

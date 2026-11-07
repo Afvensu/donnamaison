@@ -12,6 +12,7 @@ import {
 import { GarmentArt, altPalette } from "@/components/GarmentArt";
 import { ColourSwatches, SizeButton } from "@/components/Drawers";
 import { Reveal } from "@/components/Reveal";
+import { Button } from "@/components/ui/button";
 import { useShop } from "@/store/shop";
 
 type ProductLoaderData = { product: Product };
@@ -25,8 +26,15 @@ export const Route = createFileRoute("/products/$slug")({
         {
           name: "description",
           content:
-            data?.product.note ??
-            "Hand-finished tailoring and dresses from Lagos, cut for real curves from size 6 to 20.",
+            data?.product.note ?? "Donna Maison ready-to-wear for the modern, cosmopolitan woman.",
+        },
+        {
+          property: "og:title",
+          content: data ? `${data.product.name} — Donna Maison` : "Donna Maison collection",
+        },
+        {
+          property: "og:description",
+          content: data?.product.desc ?? "Explore Donna Maison ready-to-wear.",
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
@@ -109,9 +117,7 @@ function ProductPage() {
 
         {/* Details */}
         <div className="lg:pt-2">
-          <span className="eyebrow">
-            {product.cat} · {CURRENCIES[product.cur].region}
-          </span>
+          <span className="eyebrow">{product.cat}</span>
           <h1 className="mt-3 mb-2 font-serif text-[clamp(34px,4vw,54px)] leading-[1.02] font-light tracking-[-0.02em]">
             {product.name}
           </h1>
@@ -121,43 +127,49 @@ function ProductPage() {
           </p>
 
           {/* Craft / investment value */}
-          <ul className="mb-8 border-y border-line py-5">
-            {product.craft.map((c) => (
-              <li key={c} className="flex items-start gap-3 py-1.5 text-[13px] leading-relaxed text-ink-soft">
-                <span className="mt-[7px] h-[7px] w-[7px] shrink-0 rounded-full bg-terracotta" />
-                {c}
-              </li>
-            ))}
-          </ul>
+          {product.craft.length > 0 && (
+            <ul className="mb-8 border-y border-line py-5">
+              {product.craft.map((c) => (
+                <li
+                  key={c}
+                  className="flex items-start gap-3 py-1.5 text-[13px] leading-relaxed text-ink-soft"
+                >
+                  <span className="mt-[7px] h-[7px] w-[7px] shrink-0 rounded-full bg-terracotta" />
+                  {c}
+                </li>
+              ))}
+            </ul>
+          )}
 
           {/* Fit note */}
           <div className="mb-7 border-l-2 border-terracotta bg-sand-warm/60 px-4 py-3.5 text-[12.5px] leading-relaxed text-ink-soft">
             <b className="font-semibold text-ink">Fit note — read this first:</b> {product.fit}
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setFitOpen((v) => !v)}
               className="mt-2 block text-[10.5px] tracking-[0.12em] text-terracotta uppercase hover:underline"
             >
               {fitOpen ? "Hide fit guidance" : "Show fit guidance"}
-            </button>
+            </Button>
             {fitOpen && (
               <p className="mt-2 text-[12px] leading-relaxed">
-                Between sizes? Take the smaller if the fabric has give (crepe), your usual size if
-                it's structured (duchess). Over 5'9"? The atelier cuts the length to you at no
-                charge. Every piece includes a complimentary atelier fitting and free alterations
-                within 14 days.
+                Check the available size information and contact Donna Maison for garment
+                measurements before ordering. No custom cutting or fitting service is offered here.
               </p>
             )}
           </div>
 
           {/* Composition + occasions */}
           <dl className="mb-8 grid gap-3 text-[13px]">
-            <div className="flex gap-3">
-              <dt className="w-[110px] shrink-0 text-[10.5px] tracking-[0.14em] text-muted-warm uppercase">
-                Fabric
-              </dt>
-              <dd className="text-ink-soft">{product.fabric}</dd>
-            </div>
-            <div className="flex gap-3">
+            {product.fabric && (
+              <div className="grid min-w-0 gap-2 sm:grid-cols-[110px_minmax(0,1fr)]">
+                <dt className="w-[110px] shrink-0 text-[10.5px] tracking-[0.14em] text-muted-warm uppercase">
+                  Fabric
+                </dt>
+                <dd className="text-ink-soft">{product.fabric}</dd>
+              </div>
+            )}
+            <div className="grid min-w-0 gap-2 sm:grid-cols-[110px_minmax(0,1fr)]">
               <dt className="w-[110px] shrink-0 text-[10.5px] tracking-[0.14em] text-muted-warm uppercase">
                 Occasions
               </dt>
@@ -172,11 +184,11 @@ function ProductPage() {
                 ))}
               </dd>
             </div>
-            <div className="flex gap-3">
+            <div className="grid min-w-0 gap-2 sm:grid-cols-[110px_minmax(0,1fr)]">
               <dt className="w-[110px] shrink-0 text-[10.5px] tracking-[0.14em] text-muted-warm uppercase">
                 Sizing
               </dt>
-              <dd className="text-ink-soft">UK 6–20 · graded from four drafted bodies</dd>
+              <dd className="text-ink-soft">Confirm available sizing with Donna Maison</dd>
             </div>
           </dl>
 
@@ -186,33 +198,39 @@ function ProductPage() {
             <ColourSwatches product={product} colour={colour} onPick={setColour} />
           </div>
           <div className="mb-8">
-            <span className="eyebrow mb-2.5 block">Size · UK 6–20</span>
+            <span className="eyebrow mb-2.5 block">Size</span>
             <div className="flex flex-wrap gap-2">
               {SIZES.map((s) => (
-                <SizeButton key={s.id} size={s} active={size === s.id} onClick={() => setSize(s.id)} />
+                <SizeButton
+                  key={s.id}
+                  size={s}
+                  active={size === s.id}
+                  onClick={() => setSize(s.id)}
+                />
               ))}
             </div>
-            <button
+            <Button
+              variant="ghost"
               onClick={openSizeGuide}
               className="mt-3 text-[11px] tracking-[0.12em] text-terracotta uppercase hover:underline"
             >
               Size &amp; fit guide →
-            </button>
+            </Button>
           </div>
 
-          <button
+          <Button
+            variant="ghost"
             onClick={() => addToBag(product.id, colour, size)}
-            className="mb-3 w-full bg-ink px-8 py-4 text-[11px] font-medium tracking-[0.2em] text-bone uppercase transition-colors duration-300 hover:bg-terracotta"
+            className="h-auto whitespace-normal rounded-none mb-3 w-full bg-ink px-8 py-4 text-[11px] font-medium tracking-[0.2em] text-bone uppercase transition-colors duration-300 hover:bg-terracotta"
           >
             Add to bag — {priceFull(product)}
-          </button>
+          </Button>
           <p className="mb-8 text-[10.5px] leading-relaxed text-muted-warm">
-            Ships worldwide from Nigeria · Returns 3–5 days Nigeria, 7–10 days internationally ·
-            Free fit advice from the atelier before you buy.
+            Your bag is saved on this device. Checkout and payments are not connected.
           </p>
 
           <Reveal className="border-t border-line pt-6">
-            <span className="eyebrow">Also cut for</span>
+            <span className="eyebrow">Discover occasion edits</span>
             <div className="mt-3 flex flex-wrap gap-2">
               {occasionTitles.map((o) => (
                 <a
@@ -231,7 +249,7 @@ function ProductPage() {
       {/* Related pieces */}
       <div className="mx-auto max-w-[1400px] px-5 pb-20 sm:px-8 lg:px-16">
         <h2 className="mb-6 font-serif text-[clamp(24px,2.6vw,36px)] font-light tracking-[-0.02em]">
-          More from the atelier
+          More from the collection
         </h2>
         <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 lg:gap-x-6">
           {PRODUCTS.filter((p) => p.id !== product.id)
@@ -256,9 +274,9 @@ function ProductPage() {
                     }}
                   />
                 </div>
-                <div className="flex items-start justify-between gap-2 pt-3">
+                <div className="grid min-w-0 gap-1 pt-3">
                   <div className="font-serif text-[16px] leading-snug">{p.name}</div>
-                  <div className="text-right whitespace-nowrap font-serif text-[14px]">
+                  <div className="font-serif text-[14px]">
                     {CURRENCIES[p.cur].symbol}
                     {p.min.toLocaleString("en-GB", {
                       minimumFractionDigits: p.min % 1 ? 2 : 0,

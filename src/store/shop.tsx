@@ -209,7 +209,7 @@ export function bagSummary(bag: BagLine[]) {
   return Array.from(groups.entries()).map(([cur, g]) => ({
     cur,
     symbol: CURRENCIES[cur].symbol,
-    region: CURRENCIES[cur].region,
+
     totalLabel: `${CURRENCIES[cur].symbol}${g.total.toLocaleString("en-GB", { minimumFractionDigits: g.total % 1 ? 2 : 0, maximumFractionDigits: 2 })}`,
     qty: g.qty,
   }));

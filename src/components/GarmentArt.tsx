@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { PRODUCTS } from "@/data/products";
 
 export interface ArtOptions {
@@ -17,20 +18,13 @@ export interface ArtOptions {
 export function resolveGarmentPhoto(
   options: Pick<ArtOptions, "name" | "kind" | "trousers"> & { uid?: string },
 ) {
-  const uid = options.uid ?? options.name ?? "garment";
-  const requestedProduct = PRODUCTS.find((product) => product.name === options.name);
-  const fallbackCategory =
-    requestedProduct?.cat ??
-    (options.trousers || options.kind === "trouser" ? "Trouser Sets" : "Dresses");
-  const photoProduct =
-    (requestedProduct?.images.length ? requestedProduct : undefined) ??
-    PRODUCTS.find((product) => product.cat === fallbackCategory && product.images.length > 0) ??
-    PRODUCTS.find((product) => product.images.length > 0);
-
-  return photoProduct?.images[/\-alt$/.test(uid) && photoProduct.images[1] ? 1 : 0];
+  const product = PRODUCTS.find(product => product.name === options.name);
+  if (!product) return undefined;
+  const index = /-alt$/.test(options.uid ?? "") && product.images[1] ? 1 : 0;
+  return product.images[index];
 }
 
-/** Renders supplied catalog photography, using a category-matched photo when needed. */
+/** Exact supplied product photography only; never borrow another garment image. */
 export function GarmentArt({
   options,
   className,
@@ -39,7 +33,13 @@ export function GarmentArt({
   className?: string;
 }) {
   const src = resolveGarmentPhoto(options);
-  if (!src) return null;
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  if (!src || failedSrc === src) return (
+    <div role="img" aria-label={`${options.name ?? "Donna Maison"} — photograph unavailable`} className={`${className ?? ""} flex h-full w-full flex-col items-center justify-center gap-3 bg-sand-warm p-3 text-center text-muted-warm`}>
+      <span aria-hidden="true" className="font-serif text-3xl">DM</span>
+      <span className="text-[11px] leading-relaxed">Photograph unavailable</span>
+    </div>
+  );
 
   return (
     <img
@@ -47,6 +47,11 @@ export function GarmentArt({
       alt={options.name ? `${options.name} by Donna Maison` : "Donna Maison design"}
       loading={options.uid === "hero" ? "eager" : "lazy"}
       decoding="async"
+      width={1000}
+      height={1400}
+      sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
+      fetchPriority={options.uid === "hero" ? "high" : "auto"}
+      onError={() => setFailedSrc(src)}
       className={`${className ?? ""} h-full w-full object-cover object-top`}
     />
   );

@@ -22,8 +22,7 @@ export function Occasions({
             </h2>
           </div>
           <p className="max-w-[38ch] text-[13.5px] leading-relaxed text-ink-soft">
-            Three ways in. Choose the room, and we'll show you the pieces cut for it — not a
-            category, a purpose.
+            Discover pieces for work, celebrations and everyday plans. These edits overlap, just as your wardrobe does.
           </p>
         </Reveal>
 
@@ -50,20 +49,20 @@ export function Occasions({
                     uid: `occ-${o.id}`,
                     name: photoProduct?.name,
                     kind: o.kind,
-                    hem: o.hem,
+                    
                     sleeves: o.sleeves,
                     trousers: o.trousers,
                     palette: o.palette,
                     studio: o.studio,
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                <div className="relative z-2 flex h-full flex-col justify-end p-6 text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/20 to-transparent" />
+                <div className="relative z-2 flex h-full flex-col justify-end p-6 text-paper">
                   <div className="text-[9.5px] tracking-[0.22em] uppercase opacity-80">{o.k}</div>
                   <h3 className="mt-2 font-serif text-[clamp(22px,2.4vw,30px)] leading-tight font-normal">
                     {o.title}
                   </h3>
-                  <p className="mt-2 max-w-[30ch] text-[12.5px] leading-relaxed text-white/85">
+                  <p className="mt-2 max-w-[30ch] text-[12.5px] leading-relaxed text-paper/85">
                     {o.d}
                   </p>
                   <span className="mt-4 text-[10.5px] tracking-[0.16em] uppercase">
